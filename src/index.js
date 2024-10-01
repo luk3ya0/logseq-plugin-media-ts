@@ -346,6 +346,8 @@ async function mediaRenderer({ slot, payload: { arguments: args } }) {
   const path = args[1].trim()
   if (!path) return
 
+  const vtt = args[2].trim()
+
   const renderered = parent.document.getElementById(slot).childElementCount > 0
   if (!renderered) {
     const ext = getExt(path)
@@ -356,7 +358,9 @@ async function mediaRenderer({ slot, payload: { arguments: args } }) {
       template: VideoExts.has(ext)
         ? `<video controls crossorigin="anonymous" style="width: 100%" src="${await normalize(
             path,
-          )}"></video>`
+        )}">
+          <track src="${await normalize(vtt)}" kind="subtitles" label="Subtitles" srclang="en">
+          </video>`
         : AudioExts.has(ext)
         ? `<audio controls crossorigin="anonymous" src="${await normalize(
             path,
